@@ -1,0 +1,10 @@
+test3 { #GtkWindow
+  fixed1 { #GtkFixed
+    entry1 { #GtkPandaEntry
+      textdata varchar(32);
+    };
+    entry2 { #GtkPandaEntry
+      textdata varchar(32);
+    };
+  };
+};

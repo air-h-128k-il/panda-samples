@@ -1,0 +1,11 @@
+test1 { #GtkWindow
+  fixed1 { #GtkFixed
+    pixmap1 { #GtkPandaPixmap
+      objectdata object;
+    };
+    fc1 { #GtkFileChooserButton
+      objectdata object;
+      fname varchar(256);
+    };
+  };
+};

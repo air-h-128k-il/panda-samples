@@ -1,0 +1,21 @@
+xml2 {
+    context		int;
+    object		object;
+	mode		int;
+    recordname	varchar(128);
+
+	body {
+		c1		char(128);
+		i1		int;
+		n1		number(15,10);
+		b1		bool;
+		a1		int[3];
+ 		r1 {
+            r1i1        int[10];
+			r1c1		char(128);
+			r2 {
+				r2c1	char(128);
+			};
+		}[3];
+	};
+};

@@ -1,0 +1,36 @@
+name    test1;
+
+base    "%PWD%";
+ddir    "=/";
+record  "=/";
+
+multiplex_level no;
+
+linkage link;
+
+wfc {
+    port      ":9001";
+};
+
+blob {
+	space	"=/blob";
+	port	"/tmp/sysdata";
+};
+
+db_group "blob" {
+	type	"NativeBLOB";
+};
+
+db_group "xml2" {
+	type	"XMLIO2";
+};
+
+db_group {
+	type "PostgreSQL";
+	port "";
+	name "pandatest";
+};
+
+ld {
+	test1	1;
+};

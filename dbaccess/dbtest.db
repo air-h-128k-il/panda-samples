@@ -1,0 +1,31 @@
+dbtest {
+  uuid varchar(36);
+  fname varchar(256);
+};
+
+primary {
+  uuid;
+};
+
+path all {
+  DBSELECT {
+    DECLARE dbtest_all_csr CURSOR FOR
+    SELECT * FROM dbtest ORDER BY uuid;
+  };
+};
+
+path key {
+  DBSELECT {
+    DECLARE dbtest_key_csr CURSOR FOR
+    SELECT * FROM dbtest WHERE uuid = :uuid;
+  };
+  DBINSERT {
+    INSERT INTO dbtest (uuid,fname) VALUES(:uuid,:fname);
+  };
+  DBUPDATE {
+    UPDATE dbtest SET uuid = :uuid,fname = :fname WHERE uuid = :uuid;
+  };
+  DBDELETE {
+    DELETE FROM dbtest WHERE uuid = :uuid;
+  };
+};

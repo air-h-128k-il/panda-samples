@@ -1,0 +1,85 @@
+if [ ! -e directory ]; then
+    echo "'directory' not found. You must run make."
+    exit 1
+fi
+
+APPDIR="."
+
+PASSWORD="./passwd"
+RECORDDIR="$APPDIR"
+SCREENDIR="$APPDIR"
+
+WFC_LOG="$APPDIR/wfc.log"
+GLSERVER_LOG="$APPDIR/glserver.log"
+
+APS_PID="$APPDIR/aps.pid"
+WFC_PID="$APPDIR/wfc.pid"
+GLSERVER_PID="$APPDIR/glserver.pid"
+
+export PATH=/usr/lib/panda/bin:/usr/lib/panda/sbin:$PATH
+export LD_LIBRARY_PATH=/usr/lib/panda/
+export COB_LIBRARY_PATH=${APPDIR}/cobol:$HOME/local/lib:/usr/local/lib:/usr/lib:/usr/lib/panda:/opt/panda/lib
+
+#set -e
+
+kill_daemon() {
+    pidfile=$1
+    signal=$2
+    [ -f $pidfile ] && kill -$signal `cat $pidfile` || /bin/true
+    rm -f $pidfile
+}
+
+case "$1" in
+    start)
+        echo "start"
+        wfc >"$WFC_LOG" 2>&1 &
+        echo $! > "$WFC_PID"
+        sleep 1
+        aps -connect-retry test1 >aps1.log 2>&1 &
+        aps -connect-retry test2 >aps2.log 2>&1 &
+        echo $! > "$APS_PID"
+        sleep 1
+        glserver -api -auth file:///`pwd`/passwd -screen $SCREENDIR -record $RECORDDIR >"$GLSERVER_LOG" 2>&1 &
+        echo $! > "$GLSERVER_PID"
+        echo "."
+        sleep 36000
+        ;;
+    stop)
+        echo "stop"
+        $0 clean
+		(killall glserver)
+		(killall aps)
+		(killall wfc)
+		(killall valgrind)
+        ;;
+    restart)
+        echo "restart"
+        $0 stop
+        sleep 2
+        $0 start
+        ;;
+    clean)
+        echo "clean"
+		rm -f *.log *.pid
+        rm -f ${GLSERVER_LOG}
+        rm -f ${APS_LOG}
+        rm -f ${WFC_LOG}
+        rm -f ${APPDIR}/pid
+        rm -f ${APPDIR}/*.ses
+        rm -f ${APPDIR}/blob/*
+        rm -rf ${APPDIR}/cache
+        if [ -e ${APPDIR}/blob ]; then
+            for f in ${APPDIR}/blob/*; do
+                if [ ! -d $f ]; then
+                    rm -rf $f
+                fi
+            done
+        fi
+        echo "done."
+        ;;
+    *)
+        echo "Usage: init {start|stop|restart|clean}" >&2
+        exit 1
+        ;;
+esac
+echo "end"

@@ -1,0 +1,15 @@
+cobol/DB-BLOB
+cobol/DB-XML2
+cobol/LINKAREA
+cobol/MCPAREA
+cobol/SCRAREA
+cobol/SPAAREA
+cobol/TEST1.so
+directory
+*.swp
+aps.log
+aps.pid
+glserver.log
+glserver.pid
+wfc.log
+wfc.pid

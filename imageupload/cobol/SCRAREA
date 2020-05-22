@@ -1,0 +1,9 @@
+        01  SCRAREA.
+            02  SCREENDATA.
+              03  TEST1.
+                04  FIXED1.
+                  05  PIXMAP1.
+                    06  DOWNDATA  PIC X(36).
+                  05  FC1.
+                    06  UPDATA  PIC X(36).
+                    06  FNAME   PIC X(256).

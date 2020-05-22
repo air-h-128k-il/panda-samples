@@ -1,0 +1,39 @@
+name    test1;
+
+base    "%PWD%";
+ddir    "=/";
+record  "=/";
+
+multiplex_level no;
+
+initial_ld test1;
+
+linkage link;
+
+wfc {
+    port      ":9001";
+};
+
+blob {
+    space   "=/blob";
+    port    "/tmp/sysdata";
+};
+
+db_group {
+    type "PostgreSQL";
+    name "pandatest";
+    port "";
+};
+
+db_group    "blob" {
+    type    "NativeBLOB";
+};
+
+ld      {
+    test1      1;
+};
+
+# Local Variables:
+# indent-tabs-mode: nil
+# tab-width: 4
+# End:
