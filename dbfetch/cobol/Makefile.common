@@ -1,0 +1,54 @@
+# -*- makefile -*-
+# You must set below variable, if you use this.
+# * APPLICATIONS
+# * top_srcdir
+# * LDNAME
+# * LDFILE
+# * LINKREC
+# * SPAREC
+# * SCRREC
+# * COBOL_DEPENDENCIES
+
+all: $(APPLICATIONS)
+
+clean:
+	rm -f $(APPLICATIONS) $(CLEAN_FILES)
+
+MCPAREA: $(top_srcdir)/directory
+	@echo "copygen > $@"
+	copygen -mcp				\
+	    -dir $(top_srcdir)/directory > $@;	\
+	if [ $$? != 0 ]; then			\
+	    rm -f $@;				\
+	    exit 1;				\
+	fi
+
+LINKAREA: $(LINKREC) $(top_srcdir)/directory
+	@echo "copygen > $@"
+	copygen -linkage -prefix "LNK-" -ld $(LDNAME)	\
+	    -dir $(top_srcdir)/directory > $@;		\
+	if [ $$? != 0 ]; then				\
+	    rm -f $@;					\
+	    exit 1;					\
+	fi
+
+SPAAREA: $(SPAREC) $(top_srcdir)/directory
+	@echo "copygen > $@"
+	copygen $(SPAREC) -name SPAAREA -prefix "SPA-" -ld $(LDNAME)	\
+	    -dir $(top_srcdir)/directory > $@;				\
+	if [ $$? != 0 ]; then						\
+	    rm -f $@;							\
+	    exit 1;							\
+	fi
+
+SCRAREA: $(SCRREC) $(top_srcdir)/directory
+	@echo "copygen > $@"
+	copygen -ld $(LDNAME) -screen -prefix "SCR-" -name SCRAREA	\
+	    -dir $(top_srcdir)/directory > $@;		\
+	if [ $$? != 0 ]; then				\
+	    rm -f $@;					\
+	    exit 1;					\
+	fi
+
+%.so: %.CBL $(COBOL_DEPENDENCIES)
+	cobc -m -dynamic -fixed -fimplicit-init -std=cobol85 $<

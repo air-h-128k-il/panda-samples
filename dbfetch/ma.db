@@ -1,0 +1,8 @@
+ma {
+  object object;
+  mode int;
+  data {
+    id varchar(36);
+    data1 varchar(256);
+  };
+};

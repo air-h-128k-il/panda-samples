@@ -1,0 +1,15 @@
+tbl_fetch_test {
+  id varchar(36);
+  data1 varchar(256);
+};
+
+primary {
+  id;
+};
+
+path all {
+  DBSELECT {
+    DECLARE tbl_fetch_test_all_csr CURSOR FOR
+    SELECT * FROM tbl_fetch_test ORDER BY id;
+  };
+};

@@ -1,0 +1,41 @@
+# マルチフェッチ機能テスト
+
+## 概要
+
+* HTTP GETでtbl_fetch_testの一覧を返却する日レセAPI
+    * tbl_fetch_testには50件のレコード
+* APIリクエスト時のHTTPパラメータでmcp.limit(ミドルウェア内部のフェッチ件数)を変更可能
+    * args1 = 0 limit = 100
+    * args1 = 1 limit = 1
+    * args1 = 2 limit = 49
+    * args1 = 3 limit = 0(Error)
+
+## 動作方法
+
+## 準備
+
+実行するUnixユーザと同じDBユーザを作成し、pandatestというDBを作成しておく。
+
+$ cd dbfetch
+$ sudo -u postgres createuser -d user
+$ createdb pandatest
+$ psql pandatest < tbl_fetch_test.sql
+$ /usr/lib/panda/bin/monsetup -dir directory
+$ make
+
+## 起動
+
+$ ./init start
+
+## 終了
+
+$ ./init stop
+$ ./init clean
+
+## GET
+
+http://localhost:8000/test1/test1
+
+以下のコマンドでリクエストを発行できる。
+
+% ruby get.rb

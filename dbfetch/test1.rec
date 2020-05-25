@@ -1,0 +1,9 @@
+test1 {
+	arguments {
+      arg1 varchar(1);
+	};
+	http_method		varchar(16);
+	content_type	varchar(256);
+	body			object;
+	http_status		int;
+};
